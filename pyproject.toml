@@ -1,0 +1,26 @@
+[project]
+name = "miriam-comunica"
+version = "0.1.0"
+description = "Miriam Comunica app"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flet==0.84.0",
+]
+
+[tool.setuptools]
+py-modules = ["app", "local_settings", "main"]
+
+[tool.flet]
+org = "com.miriam"
+product = "Miriam Comunica"
+company = "Miriam Comunica"
+copyright = "Copyright (C) 2026 by Miriam Comunica"
+
+[tool.flet.android]
+split_per_abi = true
+min_sdk_version = 24
+target_sdk_version = 34
+permissions = [
+    "android.permission.INTERNET",
+]
