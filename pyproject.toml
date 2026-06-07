@@ -9,7 +9,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-py-modules = ["app", "local_settings", "main"]
+py-modules = ["app", "main"]
 
 [tool.flet]
 org = "com.miriam"
