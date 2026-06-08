@@ -1,5 +1,4 @@
 import flet as ft
-import webbrowser
 import json
 import re
 import unicodedata
@@ -1557,7 +1556,8 @@ def phone_frame(content: ft.Control) -> ft.Container:
                         bgcolor="#111111",
                     ),
                 ),
-            ]
+            ],
+            fit=ft.StackFit.EXPAND,
         ),
     )
 
@@ -1596,44 +1596,28 @@ def bilingual_mobile_button(
     if icon_name is None and text_es.startswith("Clases online"):
         icon_name = ft.Icons.CHAT_OUTLINED
     title_size = 13 if len(text_es) >= 26 else 14 if len(text_es) >= 22 else 16
-    title_width = max(180, width - 110)
+    title_width = max(180, width - 80)
     button_height = 84 if len(text_es) >= 28 else height
-    title_row_controls: list[ft.Control] = []
-    if icon_name:
-        title_row_controls.append(
-            ft.Icon(
-                icon_name,
-                size=15,
-                color=color,
-            )
-        )
-    title_row_controls.append(
-        ft.Container(
-            width=title_width,
-            alignment=ft.Alignment(0, 0),
-            content=ft.Text(
-                text_es,
-                text_align=ft.TextAlign.CENTER,
-                size=title_size,
-                weight=ft.FontWeight.W_700,
-                font_family=TITLE_FONT,
-                color=color,
-                no_wrap=False,
-                max_lines=2,
-            ),
-        )
-    )
-
-    return ft.Button(
-        content=ft.Column(
-            [
-                ft.Row(
-                    title_row_controls,
-                    spacing=6,
-                    tight=True,
-                    alignment=ft.MainAxisAlignment.CENTER,
+    button_content = ft.Column(
+        [
+            ft.Container(
+                width=title_width,
+                alignment=ft.Alignment(0, 0),
+                content=ft.Text(
+                    text_es,
+                    text_align=ft.TextAlign.CENTER,
+                    size=title_size,
+                    weight=ft.FontWeight.W_700,
+                    font_family=TITLE_FONT,
+                    color=color,
+                    no_wrap=False,
+                    max_lines=2,
                 ),
-                ft.Text(
+            ),
+            ft.Container(
+                width=title_width,
+                alignment=ft.Alignment(0, 0),
+                content=ft.Text(
                     text_en,
                     text_align=ft.TextAlign.CENTER,
                     size=11,
@@ -1643,11 +1627,35 @@ def bilingual_mobile_button(
                     no_wrap=False,
                     max_lines=2,
                 ),
+            ),
+        ],
+        spacing=2,
+        tight=True,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        alignment=ft.MainAxisAlignment.CENTER,
+    )
+
+    return ft.Button(
+        content=ft.Stack(
+            [
+                ft.Container(
+                    alignment=ft.Alignment(0, 0),
+                    ignore_interactions=True,
+                    content=button_content,
+                ),
+                *(
+                    [
+                        ft.Container(
+                            alignment=ft.Alignment(-0.9, 0),
+                            ignore_interactions=True,
+                            content=ft.Icon(icon_name, size=15, color=color),
+                        )
+                    ]
+                    if icon_name
+                    else []
+                ),
             ],
-            spacing=2,
-            tight=True,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            alignment=ft.MainAxisAlignment.CENTER,
+            fit=ft.StackFit.EXPAND,
         ),
         on_click=on_click,
         width=width,
@@ -1986,12 +1994,7 @@ def hero_button(text: str, on_click) -> ft.Button:
 
 
 def open_external_url(page: ft.Page, url: str) -> None:
-    try:
-        opened = webbrowser.open_new_tab(url)
-        if not opened:
-            page.launch_url(url)
-    except Exception:
-        page.launch_url(url)
+    page.launch_url(url)
 
 
 TRANSLATION_CACHE: dict[str, str] = {}
